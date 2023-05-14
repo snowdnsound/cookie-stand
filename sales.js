@@ -1,11 +1,14 @@
+
 // Constructor function for creating a Location object
-function Location(name, minCustPerHour, maxCustPerHour, avgCookiesPerSale) {
+function Store(name, minCustPerHour, maxCustPerHour, avgCookiesPerSale) {
   this.name = name;
   this.minCustPerHour = minCustPerHour;
   this.maxCustPerHour = maxCustPerHour;
   this.avgCookiesPerSale = avgCookiesPerSale;
   this.cookiesPerHour = [];
   this.totalCookies = 0;
+
+  console.log(Store);
 
   // Method to generate a random number of customers per hour
   this.randomCustPerHour = function () {
@@ -21,40 +24,74 @@ function Location(name, minCustPerHour, maxCustPerHour, avgCookiesPerSale) {
     }
   };
 
-  // Method to display the values of cookies per hour as an unordered list in the browser
-  this.render = function () {
-    let div = document.getElementById(this.name.toLowerCase());
-    let ul = document.createElement('ul');
-    ul.textContent = this.name;
-    div.appendChild(ul);
+  // Method to calculate the hourly totals
+  this.calculateHourlyTotals = function () {
     for (let i = 0; i < 14; i++) {
-      let li = document.createElement('li');
-      li.textContent = i + 6 + ':00 AM: ' + this.cookiesPerHour[i] + ' cookies';
-      ul.appendChild(li);
+      let total = 0;
+      for (let j = 0; j < 5; j++) {
+        total += stores[j].cookiesPerHour[i];
+      }
+      this.hourlyTotals.push(total);
     }
-    let liTotal = document.createElement('li');
-    liTotal.textContent = 'Total: ' + this.totalCookies + ' cookies';
-    ul.appendChild(liTotal);
+  };
+
+  // Method to generate the table row HTML for this location
+  this.generateTableRowHTML = function () {
+    let rowHTML = '<tr>';
+    rowHTML += '<td>' + this.name + '</td>';
+    for (let i = 0; i < 14; i++) {
+      rowHTML += '<td>' + this.cookiesPerHour[i] + '</td>';
+    }
+    rowHTML += '<td>' + this.totalCookies + '</td>';
+    rowHTML += '</tr>';
+    return rowHTML;
   };
 }
 
 // Object literals for each shop location
-let seattle = new Location('Seattle', 23, 65, 6.3);
+let seattle = new Store('Seattle', 23, 65, 6.3);
 seattle.simulateCookiesPerHour();
-seattle.render();
 
-let tokyo = new Location('Tokyo', 3, 24, 1.2);
+let tokyo = new Store('Tokyo', 3, 24, 1.2);
 tokyo.simulateCookiesPerHour();
-tokyo.render();
 
-let dubai = new Location('Dubai', 11, 38, 3.7);
+let dubai = new Store('Dubai', 11, 38, 3.7);
 dubai.simulateCookiesPerHour();
-dubai.render();
 
-let paris = new Location('Paris', 20, 38, 2.3);
+let paris = new Store('Paris', 20, 38, 2.3);
 paris.simulateCookiesPerHour();
-paris.render();
 
-let lima = new Location('Lima', 2, 16, 4.6);
+let lima = new Store('Lima', 2, 16, 4.6);
 lima.simulateCookiesPerHour();
-lima.render();
+
+let totals = new Store('Totals', 0, 0, 0);
+
+for (let i = 0; i < 14; i++) {
+  let totalCookiesPerHour = seattle.cookiesPerHour[i] + tokyo.cookiesPerHour[i] + dubai.cookiesPerHour[i] + paris.cookiesPerHour[i] + lima.cookiesPerHour[i];
+  totals.cookiesPerHour.push(totalCookiesPerHour);
+  totals.totalCookies += totalCookiesPerHour;
+}
+
+let stores = [
+  new Store('Seattle', 23, 65, 6.3),
+  new Store('Tokyo', 3, 24, 1.2),
+  new Store('Dubai', 11, 38, 3.7),
+  new Store('Paris', 20, 38, 2.3),
+  new Store('Lima', 2, 16, 4.6)
+];
+
+// Each location's row to the table
+let tableHTML = '<table>';
+tableHTML += '<tr><th>Location</th><th>6:00 AM</th><th>7:00 AM</th><th>8:00 AM</th><th>9:00 AM</th><th>10:00 AM</th><th>11:00 AM</th><th>12:00 PM</th><th>1:00 PM</th><th>2:00 PM</th><th>3:00 PM</th><th>4:00 PM</th><th>5:00 PM</th><th>6:00 PM</th><th>7:00 PM</th><th>Daily Location Total</th></tr>';
+tableHTML += seattle.generateTableRowHTML();
+tableHTML += tokyo.generateTableRowHTML();
+tableHTML += dubai.generateTableRowHTML();
+tableHTML += paris.generateTableRowHTML();
+tableHTML += lima.generateTableRowHTML();
+tableHTML += totals.generateTableRowHTML();
+tableHTML += '</table>';
+
+// Display the table on the page
+let tableContainer = document.getElementById('table-container');
+tableContainer.innerHTML = tableHTML;
+
