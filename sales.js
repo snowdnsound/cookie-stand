@@ -1,4 +1,4 @@
-// Create a constructor function for creating a Location object
+// Constructor function for creating a Location object
 function Location(name, minCustPerHour, maxCustPerHour, avgCookiesPerSale) {
   this.name = name;
   this.minCustPerHour = minCustPerHour;
@@ -38,7 +38,7 @@ function Location(name, minCustPerHour, maxCustPerHour, avgCookiesPerSale) {
   };
 }
 
-// Create object literals for each shop location
+// Object literals for each shop location
 let seattle = new Location('Seattle', 23, 65, 6.3);
 seattle.simulateCookiesPerHour();
 seattle.render();
