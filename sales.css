@@ -13,3 +13,33 @@ table {
     border-collapse: collapse;
 
 }
+
+tr{
+    background-color: rgb(186, 246, 237);
+  }
+
+legend {
+
+    text-emphasis: bold;
+    background-color: rgb(186, 246, 237);
+
+
+}
+
+fieldset{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 200px;
+  }
+
+  form{
+    margin-bottom: 500px;
+  }
+
+  button{
+    width: 100px;
+
+  }
+
+  
